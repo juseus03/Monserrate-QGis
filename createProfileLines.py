@@ -37,14 +37,23 @@ print "Selected layer name: " ,layer_points.name()
 #Creates reference Points
 pt_ML = QgsPoint(-74.0647,4.60274)
 pt_ig = QgsPoint(-74.0554,4.60565)
-angle_MLig=pt_ML.azimuth(pt_ig)
 
+
+numPts=0
 #Reads points in layer
-
 for f in layer_points.getFeatures():
     geom=f.geometry()
-    pt_act=QgsPoint(geom.asPoint().x(),geom.asPoint().y())
-    drawLine(pt_ML,pt_act,angle_MLig)
+    if(numPts==0):
+         pt_ML=QgsPoint(geom.asPoint().x(),geom.asPoint().y())
+    elif(numPts==1):
+        pt_ig=QgsPoint(geom.asPoint().x(),geom.asPoint().y())
+        angle_MLig=pt_ML.azimuth(pt_ig)
+        drawLine(pt_ML,pt_ig,angle_MLig)
+    else:
+        angle_MLig=pt_ML.azimuth(pt_ig)
+        pt_act=QgsPoint(geom.asPoint().x(),geom.asPoint().y())
+        drawLine(pt_ML,pt_act,angle_MLig)
+    numPts+=1
 
 
 
